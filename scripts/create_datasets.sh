@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Large dataset (~30GB)  -  does not fit in RAM
 PREFIX="large"
 export ARG_N_BATCHES=30000
@@ -21,16 +23,21 @@ export ARG_OUT_PATH=${PREFIX}_raw_dataset
 # export ARG_BATCH_SIZE=100
 # export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
+date
 python data_gen.py --no-compact # --verbose
 echo -e "\n$ARG_OUT_PATH"
 du -sh $ARG_OUT_PATH
 
 # Create ingested dataset: partitioned, one file per batch
+date
 python ingestion.py --in-path ${PREFIX}_raw_dataset --out-path ${PREFIX}_ingested_dataset
 echo -e "\n${PREFIX}_ingested_dataset"
 du -sh ${PREFIX}_ingested_dataset
 
 # Create compacted dataset: partitioned, one file per partition
+date
 python compaction.py --in-path ${PREFIX}_ingested_dataset --out-path ${PREFIX}_compacted_dataset
 echo -e "\n${PREFIX}_compacted_dataset"
 du -sh ${PREFIX}_compacted_dataset
+
+date
