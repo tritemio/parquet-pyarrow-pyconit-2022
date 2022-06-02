@@ -3,18 +3,18 @@
 set -euo pipefail
 
 # Large dataset (~30GB)  -  does not fit in RAM
-PREFIX="large"
-export ARG_N_BATCHES=30000
-export ARG_BATCH_DURATION=2
-export ARG_BATCH_SIZE=10000
-export ARG_OUT_PATH=${PREFIX}_raw_dataset
-
-# # Medium dataset (~3GB)  -  fits in RAM
-# PREFIX="medium"
+# PREFIX="large2"
 # export ARG_N_BATCHES=3000
 # export ARG_BATCH_DURATION=2
-# export ARG_BATCH_SIZE=10000
+# export ARG_BATCH_SIZE=100000
 # export ARG_OUT_PATH=${PREFIX}_raw_dataset
+
+# Medium dataset (~3GB)  -  fits in RAM
+PREFIX="medium2"
+export ARG_N_BATCHES=300
+export ARG_BATCH_DURATION=24
+export ARG_BATCH_SIZE=100000
+export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
 # # Tiny dataset (10 files)
 # PREFIX="tiny"
@@ -24,6 +24,7 @@ export ARG_OUT_PATH=${PREFIX}_raw_dataset
 # export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
 date
+env | grep ARG
 python data_gen.py --no-compact # --verbose
 echo -e "\n$ARG_OUT_PATH"
 du -sh $ARG_OUT_PATH
