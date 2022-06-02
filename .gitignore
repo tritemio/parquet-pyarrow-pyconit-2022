@@ -1,0 +1,6 @@
+.ipynb_checkpoints/
+.pyc
+__pycache__
+.DS_STORE
+*.parquet
+.vscode
