@@ -5,23 +5,23 @@ set -euo pipefail
 # Large dataset (~30GB)  -  does not fit in RAM
 # PREFIX="large2"
 # export ARG_N_BATCHES=3000
-# export ARG_BATCH_DURATION=2
+# export ARG_BATCH_DURATION=6
 # export ARG_BATCH_SIZE=100000
 # export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
 # Medium dataset (~3GB)  -  fits in RAM
-PREFIX="medium2"
-export ARG_N_BATCHES=300
-export ARG_BATCH_DURATION=24
-export ARG_BATCH_SIZE=100000
-export ARG_OUT_PATH=${PREFIX}_raw_dataset
+# PREFIX="medium2"
+# export ARG_N_BATCHES=300
+# export ARG_BATCH_DURATION=24
+# export ARG_BATCH_SIZE=100000
+# export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
 # # Tiny dataset (10 files)
-# PREFIX="tiny"
-# export ARG_N_BATCHES=10
-# export ARG_BATCH_DURATION=24
-# export ARG_BATCH_SIZE=100
-# export ARG_OUT_PATH=${PREFIX}_raw_dataset
+PREFIX="tiny"
+export ARG_N_BATCHES=10
+export ARG_BATCH_DURATION=240
+export ARG_BATCH_SIZE=100
+export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
 date
 env | grep ARG
