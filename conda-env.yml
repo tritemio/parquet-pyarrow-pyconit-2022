@@ -1,0 +1,22 @@
+name: py310
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - ca-certificates
+  - certifi
+  - openssl
+  - pyarrow
+  - pandas
+  - flake8
+  - mypy
+  - pytest
+  - ipython
+  - ipykernel
+  - notebook
+  - parquet-tools
+  - click
+  - rich
+  - jupytext
+  - nbconvert
+prefix: /Users/anto/miniconda3/envs/py310
