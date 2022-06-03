@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+# Choose one set of variables below to generate a dataset
+
 # Large dataset (~30GB)  -  does not fit in RAM
 # PREFIX="large2"
 # export ARG_N_BATCHES=3000
