@@ -30,11 +30,16 @@ export ARG_BATCH_SIZE=100
 export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
 date
-env | grep ARG
+env | grep -e "^ARG"
 
 # Go to the dir contaiing the script
 DIR=$(dirname "$(readlink -f "$0")")
 cd "$DIR"
+
+# Stop if failing type-hint checks
+mypy data_gen.py
+mypy ingestion.py
+mypy compaction.py
 
 # Create raw dataset
 # NOTE: data_gen reads its arguments from the env variables set above

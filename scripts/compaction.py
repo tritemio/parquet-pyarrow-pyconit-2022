@@ -13,8 +13,8 @@ from uuid import uuid4
 import click
 
 import pyarrow as pa             # type: ignore
-import pyarrow.dataset as ds
-import pyarrow.filesystem as fs
+import pyarrow.dataset as ds     # type: ignore
+import pyarrow.filesystem as fs  # type: ignore
 
 
 # See dataset.write_dataset docs:

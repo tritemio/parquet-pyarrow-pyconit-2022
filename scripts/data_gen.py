@@ -6,17 +6,16 @@ For details see:
     $ python data_gen.py --help
 
 """
-
+from typing import Any, Iterator
 from pathlib import Path
 import shutil
-from typing import Any, Iterator
 from uuid import uuid4
+import click
+
 import numpy as np
-import pandas as pd             # type: ignore
 import pyarrow as pa            # type: ignore
 import pyarrow.dataset as ds    # type: ignore
-import pyarrow.parquet as pq    # type: ignore
-import click
+import pandas as pd             # type: ignore
 
 
 def get_batch(

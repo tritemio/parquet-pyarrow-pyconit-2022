@@ -15,9 +15,9 @@ from rich import print as rprint
 from rich.pretty import pprint
 
 import pyarrow as pa             # type: ignore
-import pyarrow.dataset as ds
-import pyarrow.parquet as pq
-import pyarrow.filesystem as fs
+import pyarrow.dataset as ds     # type: ignore
+import pyarrow.parquet as pq     # type: ignore
+import pyarrow.filesystem as fs  # type: ignore
 
 
 def _file_visitor(written_file) -> None:
