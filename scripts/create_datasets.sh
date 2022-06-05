@@ -1,8 +1,12 @@
 #!/bin/bash
+#
+# Generate 3 parquet datasets: raw, ingestioed, compacted.
+# See README.md for details
+#
 
 set -euo pipefail
 
-# Choose one set of variables below to generate a dataset
+# Choose one set of variables below to choose the dataset size and options
 
 # Large dataset (~30GB)  -  does not fit in RAM
 # PREFIX="large2"
@@ -18,7 +22,7 @@ set -euo pipefail
 # export ARG_BATCH_SIZE=100000
 # export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
-# # Tiny dataset (10 files)
+# Tiny dataset (10 files)
 PREFIX="tiny"
 export ARG_N_BATCHES=10
 export ARG_BATCH_DURATION=240
@@ -27,6 +31,13 @@ export ARG_OUT_PATH=${PREFIX}_raw_dataset
 
 date
 env | grep ARG
+
+# Go to the dir contaiing the script
+DIR=$(dirname "$(readlink -f "$0")")
+cd "$DIR"
+
+# Create raw dataset
+# NOTE: data_gen reads its arguments from the env variables set above
 python data_gen.py --no-compact # --verbose
 echo -e "\n$ARG_OUT_PATH"
 du -sh $ARG_OUT_PATH

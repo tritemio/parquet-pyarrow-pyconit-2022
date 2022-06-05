@@ -1,3 +1,12 @@
+"""
+Script to generate a flat parquet dataset with random data.
+
+For details see:
+
+    $ python data_gen.py --help
+
+"""
+
 from pathlib import Path
 import shutil
 from typing import Any, Iterator
@@ -156,7 +165,11 @@ def create_dataset(path: str,
               help='Print info for each saved file')
 def main(compact, out_path, batch_size, n_batches, batch_duration, verbose):
     """
-    Generate a parquet dataset.
+    Generate a flat parquet dataset with random data.
+
+    The dataset contains one parquet file per batch in a flat folder
+    (no partitions). It contains numeric columns, categorical columns and a
+    datetime column called "datetime".
     """
     batch_iterator = batch_generator(
         batch_size=batch_size, n_batches=n_batches,
@@ -167,5 +180,7 @@ def main(compact, out_path, batch_size, n_batches, batch_duration, verbose):
 
 if __name__ == '__main__':
     main(auto_envvar_prefix='ARG')
+
+    # Test call with hardcoded args, to be used with debugger
     # main.callback(path='mini_batch_dataset', compact=False, batch_size=10,
     #               batch_duration=2, n_batches=2)

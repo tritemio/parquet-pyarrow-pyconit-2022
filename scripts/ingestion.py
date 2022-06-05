@@ -1,20 +1,28 @@
-import shutil
+"""
+Script to perform ingestion of a parquet dataset.
+
+For details see:
+
+    $ python ingestion.py --help
+
+"""
 from typing import Iterator, Optional
+import shutil
+from pathlib import Path
 from uuid import uuid4
 import click
-import numpy as np
-import pandas as pd             # type: ignore
-import pyarrow as pa            # type: ignore
-import pyarrow.dataset as ds    # type: ignore
-import pyarrow.parquet as pq    # type: ignore
 from rich import print as rprint
 from rich.pretty import pprint
 
-from pathlib import Path
-import data_gen
+import pyarrow as pa             # type: ignore
+import pyarrow.dataset as ds
+import pyarrow.parquet as pq
+import pyarrow.filesystem as fs
 
 
 def _file_visitor(written_file) -> None:
+    """Callback called for each parquet file saved by `ds.write_dataset()`
+    """
     path: str = written_file.path
     metadata: pa._parquet.FileMetaData = written_file.metadata
     print(f'VISITOR: {path=}')
@@ -26,7 +34,9 @@ def get_batch_queue(path: Path) -> Iterator[Path]:
         yield parquet_file_path
 
 
-def process_single_file_as_dataset_annotated(path: Path) -> None:
+def showcase_inspect_single_parquet_file(path: Path) -> None:
+    """Demonstration of inspecting a parquet file.
+    """
     bar = f'[green]{"=" * 20}[/green]'
     rprint(f'\n{bar}\nDS File: {path}\n{bar}\n')
 
@@ -53,7 +63,24 @@ def process_single_file_as_dataset_annotated(path: Path) -> None:
     pass
 
 
+def showcase_load_single_file_with_ParquetFile(path: Path) -> None:
+    """Demonstration of using `pyarrow.parquet.ParquetFile`
+    """
+    line = '=' * 20
+    rprint(f'\n[green]{line}[/green]\nPQ File:    {path}\n[green]{line}[/green]\n')
+
+    # A pointer to a single parquet file
+    parquet_file = pq.ParquetFile(path)
+    rprint(f'* Parquet File Schema:\n{parquet_file.schema}\n')
+    rprint(f'* Parquet File Metadata:\n{parquet_file.metadata}\n')
+
+    table = parquet_file.read()
+    pass
+
+
 def process_table(table: pa.Table) -> pa.Table:
+    """Process a table adding year, month and day columns.
+    """
     df = table.to_pandas()
     dt_series = df['datetime']
 
@@ -69,11 +96,11 @@ def process_table(table: pa.Table) -> pa.Table:
     return table
 
 
-def process_single_file_as_dataset(
+def process_single_file(
     input_path: Path,
     output_path: Path,
-    input_filesystem: Optional[pa.fs.FileSystem] = None,
-    output_filesystem: Optional[pa.fs.FileSystem] = None,
+    input_filesystem: Optional[fs.FileSystem] = None,
+    output_filesystem: Optional[fs.FileSystem] = None,
     verbose: bool = True,
 ) -> None:
     """
@@ -107,25 +134,18 @@ def process_single_file_as_dataset(
     )
 
 
-def process_single_file_as_parquet_file(path: Path) -> None:
-    line = '=' * 20
-    rprint(f'\n[green]{line}[/green]\nPQ File:    {path}\n[green]{line}[/green]\n')
-
-    # A pointer to a single parquet file
-    parquet_file = pq.ParquetFile(path)
-    rprint(f'* Parquet File Schema:\n{parquet_file.schema}\n')
-    rprint(f'* Parquet File Metadata:\n{parquet_file.metadata}\n')
-
-    table = parquet_file.read()
-    pass
-
-
 @click.command()
 @click.option('--out-path', required=True, help='output dataset path')
 @click.option('--in-path', required=True, help='input dataset path')
 @click.option('--verbose', is_flag=True, show_default=False, default=False,
               help='Print info for each saved file')
 def main(in_path, out_path, verbose) -> None:
+    """
+    Perform ingestion of a parquet dataset.
+
+    Takes a flat folder of parquet files and resaves it as a new dataset
+    partitioned by year, month.
+    """
     in_path = Path(in_path)
     out_path = Path(out_path)
     if not in_path.is_dir():
@@ -135,11 +155,12 @@ def main(in_path, out_path, verbose) -> None:
 
     batch_queue = get_batch_queue(in_path)
     for parquet_file in batch_queue:
-        # process_single_file_as_parquet_file(parquet_file)
-        process_single_file_as_dataset(parquet_file, out_path, verbose=verbose)
+        process_single_file(parquet_file, out_path, verbose=verbose)
         # break
 
 
 if __name__ == '__main__':
     main()
+
+    # Test call with hardcoded args, to be used with debugger
     # main.callback(out_path='ingested_dataset')
