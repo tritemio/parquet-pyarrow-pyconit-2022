@@ -32,7 +32,7 @@ export ARG_OUT_PATH=${PREFIX}_raw_dataset
 date
 env | grep -e "^ARG"
 
-# Go to the dir contaiing the script
+# Go to the dir containing the script
 DIR=$(dirname "$(readlink -f "$0")")
 cd "$DIR"
 
